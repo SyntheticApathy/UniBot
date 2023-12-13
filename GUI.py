@@ -143,6 +143,10 @@ def studying_window():
             elif subtopic == practical_info_vocabulary:
                 window.close()
                 practical_info_studies()
+            else:
+                sg.popup_ok("I'm having trouble understanding you, please try again!", keep_on_top=True, no_titlebar=True)
+                window.close()
+                studying_window()
 
         # If user clicks 'Back', redirects to last window
         if event == "Back":
@@ -353,6 +357,10 @@ def sports_window():
             if subtopic == new_sport_vocabulary:
                 window.close()
                 new_sport_window()
+            else:
+                sg.popup_ok("I'm having trouble understanding you, please try again!", keep_on_top=True, no_titlebar=True)
+                window.close()
+                sports_window()
 
 
 def university_sports_window():
@@ -429,16 +437,48 @@ def new_sport_window():
     sg.theme('DarkAmber')  # Add colour to window
 
     # Everything inside the window:
-    layout = [[sg.Text('You want to talk about university sports!')],
-              [sg.Text('The sports the university offers are:')],
-              [sg.Text(university_sport_vocabulary)],
-              [sg.Button('Ok')]
+    layout = [[sg.Text('You want to talk about a new sport.')],
+              [sg.Text('What type of sport are you looking for?')],
+              [sg.Button('Team Sports'), sg.Button('Ballgames'), sg.Button('Cardio'), sg.Button('Strength Training')],
+              [sg.Button('Cancel')]
               ]
     window = sg.Window('University Sports', layout, resizable=True)
 
     # Event loop
     while True:
         event, values = window.read()
+
+        if event == "Team Sports":
+            chose_new_sport("Team Sports")
+        elif event == 'Ballgames':
+            chose_new_sport("Ballgames")
+        elif event == 'Cardio':
+            chose_new_sport("Cardio")
+        elif event == 'Strength Training':
+            chose_new_sport("Strength Training")
+
+        if event == 'Cancel' or event == sg.WIN_CLOSED:
+            window.close()
+            exit(0)
+
+
+def chose_new_sport(type: str):
+    """
+            The window which opens when user wants to talk about a specific new university sport
+            :return: nothing
+            """
+    sg.theme('DarkAmber')  # Add colour to window
+
+    # Everything inside the window:
+    layout = [[sg.Text(f'It looks like you want to take a {type} sport!')],
+              [sg.Text("Is this sport something you'd be interested in?"), sg.Text(choose_sport(type))],
+              [sg.Button('Yes'), sg.Button('No')],
+              [sg.Button('Cancel')]
+              ]
+    window = sg.Window('University Sports', layout, resizable=True)
+
+
+
 
 
 greetings_window()

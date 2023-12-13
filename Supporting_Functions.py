@@ -112,6 +112,14 @@ def parse_events(events: List[str]) ->List[Event]:
     return list_events
 
 
+def choose_sport(type: str) -> str:
+    """
+    This function decides what sport to offer the user.
+    :param type: The option of type of sport
+    :return: This function returns a sport depending on what the user choose before.
+    """
+
+    team_sports: List[str] = ['Basketball',]
 
 
 # determining the vocabulary associated with each topic and consequent subtopic (contained in lists)
