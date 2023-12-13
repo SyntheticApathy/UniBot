@@ -1,5 +1,8 @@
+from datetime import datetime
+
 import PySimpleGUI as sg
 from Supporting_Functions import *
+from Supporting_Functions import Event
 
 
 def greetings_window():
@@ -280,7 +283,7 @@ def practical_info_studies():
 
 def social_window():
     """
-    The window which opens when user wants to talk about social stuff
+    The window which opens when user wants to talk about social activites
     :return:
     """
     sg.theme('DarkAmber')  # Add colour to window
@@ -312,6 +315,92 @@ def social_window():
                 sg.popup_ok("Input needs to not be empty!", keep_on_top=True, no_titlebar=True, text_color='Red')
                 window.close()
                 social_window()
+
+            subtopic = recognize_topic(values["-SOCIAL_SUBTOPIC-"], social_vocabulary, new_vocabulary,
+                                       join_social_vocabulary)
+
+            if subtopic == new_vocabulary:
+                window.close()
+                upcoming_social_activity_window()
+            elif subtopic == join_social_vocabulary:
+                window.close()
+                join_association_window()
+            elif subtopic == social_vocabulary:
+                window.close()
+                explicit_social_window()
+            else:
+                sg.popup_ok("I'm having trouble understanding you, please try again!", keep_on_top=True,
+                            no_titlebar=True)
+                window.close()
+                explicit_social_window()
+
+
+def explicit_social_window():
+    """
+    The window which appears when the user needs to explicitly state what social activity they want to do.
+    :return: This function returns nothing
+    """
+    sg.theme('DarkAmber')  # Add colour to window
+
+    # All the stuff inside your window.
+    layout = [[sg.Text("I'm sorry, I'm having trouble understanding you.")],
+              [sg.Text('What do you need help with?'), sg.Button('Joining a new association'), sg.Button('Upcoming '
+                                                                                                         'events')],
+              [sg.Button('Cancel'), sg.Button('Back')]]
+
+    # Create the Window
+    window = sg.Window('Social Activities', layout, resizable=True)
+
+    # Event Loop to process "events" and get the "values" of the inputs
+    while True:
+        event, values = window.read()
+        if event == 'Joining a new association':
+            window.close()
+            join_association_window()
+        if event == 'Upcoming events':
+            window.close()
+            upcoming_social_activity_window()
+        if event == 'Back':
+            window.close()
+            social_window()
+        if event == 'Cancel' or event == sg.WIN_CLOSED:
+            window.close()
+            exit(0)
+
+
+def upcoming_social_activity_window():
+    upcoming_event_list: List[Event] = upcoming_events(datetime.now().day, datetime.now().month)
+
+    sg.theme('DarkAmber')  # Add colour to window
+
+    # All the stuff inside your window.
+    layout = [[sg.Text(" The upcoming Events are:")],
+              [sg.Text(upcoming_event_list[0]), sg.Text(upcoming_events[1]), sg.Text(upcoming_events[2])],
+              [sg.Button('Cancel'), sg.Button('Back')]]
+
+    # Create the Window
+    window = sg.Window('Social Activities', layout, resizable=True)
+    while True:
+        event, values = window.read()
+
+        if event == 'Cancel' or event == sg.WIN_CLOSED:
+            window.close()
+            exit(0)
+        if event == 'Back':
+            social_window()
+
+
+def join_association_window():
+    sg.theme('DarkAmber')  # Add colour to window
+
+    # All the stuff inside your window.
+    layout = [[sg.Text("I'm sorry, I'm having trouble understanding you.")],
+              [sg.Text('What do you need help with?'), sg.Button('Joining a new association'),
+               sg.Button('Upcoming events')],
+              [sg.Button('Cancel'), sg.Button('Back')]]
+
+    # Create the Window
+    window = sg.Window('Social Activities', layout, resizable=True)
 
 
 def sports_window():
@@ -347,7 +436,7 @@ def sports_window():
                 window.close()
                 sports_window()
             # Decide what subtopic the user wants to talk about
-            subtopic = recognize_topic(values['-SPORT_SUBTOPIC-'], new_sport_vocabulary, university_sport_vocabulary,
+            subtopic = recognize_topic(values['-SPORT_SUBTOPIC-'], new_vocabulary, university_sport_vocabulary,
                                        current_sport_vocabulary)
 
             # If user wants to ask about a specific sport
@@ -355,7 +444,7 @@ def sports_window():
                 window.close()
                 university_sports_window()
             # If user wants to look for a new sport
-            if subtopic == new_sport_vocabulary:
+            if subtopic == new_vocabulary:
                 window.close()
                 new_sport_window()
             else:
@@ -468,24 +557,23 @@ def new_sport_window():
             exit(0)
 
 
-def chose_new_sport(type: str, index: int):
+def chose_new_sport(sport_type: str, index: int):
     """
 
-  :param type: the type of sport the user is looking for
+  :param sport_type: the type of sport the user is looking for
   :param index: the index of the list of potential sports
   :return: This function returns nothing
   """
 
     sg.theme('DarkAmber')  # Add colour to window
 
-    if index > len(choose_sport(type)):
-
+    if index > len(choose_sport(sport_type)):
         sorry_window()
 
-    sport_option: str = choose_sport(type)[index]
+    sport_option: str = choose_sport(sport_type)[index]
 
     # Everything inside the window:
-    layout = [[sg.Text(f'It looks like you want to take a {type} sport!')],
+    layout = [[sg.Text(f'It looks like you want to take a {sport_type} sport!')],
               [sg.Text("Is this sport something you'd be interested in? "), sg.Text(sport_option)],
               [sg.Button('Yes'), sg.Button('No')],
               [sg.Button('Cancel')]
@@ -497,7 +585,7 @@ def chose_new_sport(type: str, index: int):
         if event == 'No':
             index += 1
             window.close()
-            chose_new_sport(type, index)
+            chose_new_sport(sport_type, index)
         if event == 'Yes':
             window.close()
             chosen_sport_window(sport_option)
@@ -505,7 +593,6 @@ def chose_new_sport(type: str, index: int):
         if event == 'Cancel' or event == sg.WIN_CLOSED:
             window.close()
             exit(0)
-
 
 
 def sorry_window():
@@ -537,6 +624,7 @@ def sorry_window():
             window.close()
             exit(0)
 
+
 def chosen_sport_window(sport_option: str):
     """
     The window which displays if the user has chosen a sport.
@@ -562,9 +650,6 @@ def chosen_sport_window(sport_option: str):
         if event == 'Yes':
             window.close()
             greetings_window()
-
-
-
 
 
 greetings_window()

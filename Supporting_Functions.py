@@ -1,6 +1,7 @@
 import csv
 import re
 from typing import *
+from datetime import datetime
 
 
 class Event:
@@ -13,13 +14,23 @@ class Event:
     def __init__(self, name: str, day: int, month: str):
         self.name = name
         self.day = day
-        self.month = month
+        self.month = self.calculate_month(month)
 
     def __str__(self):
         return f'{self.name}: {self.day}, {self.month}'
 
     def __repr__(self):
         return f'{self.name}: {self.day}, {self.month}'
+
+    def calculate_month(self, month) -> int:
+        """
+        This method returns the corresponding integer for the month.
+        :param month: The month given when creating the object.
+        :return: An integer depending on the corresponding month.
+        """
+        months: List[str] = ["Jan", "Feb", "March", "April", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+        return months.index(month) + 1
 
 
 def make_plural(vocabulary_list):
@@ -136,6 +147,31 @@ def choose_sport(type: str) -> List[str]:
         return strength_training
 
 
+def upcoming_events(day: int, month: int) -> List[Event]:
+    """
+    This function checks what the next three events will be according to theh given day and month
+    :param day: the day we want to check the closest future event of
+    :param month: the month we want to check the closest future event of.
+    :return: this function returns 3 events
+    """
+    # A list of all the events
+    event_list = read_from_csv()[2]
+    # Sort the events by month
+    sorted_event_list = sorted(event_list, key=lambda event_month: event_month.month)
+
+    upcoming_events_list = []
+    for event in sorted_event_list:
+        if (month < event.month) or (month == event.month and day < event.day):
+            upcoming_events_list.append(event)
+            if len(upcoming_events_list) == 3:
+                break
+
+    return upcoming_events_list
+
+
+
+
+
 # determining the vocabulary associated with each topic and consequent subtopic (contained in lists)
 
 ###
@@ -143,7 +179,7 @@ sports_vocabulary_pre_plural = ["sport", "football", "game", "play", "tournament
 sports_vocabulary = make_plural(sports_vocabulary_pre_plural)
 university_sport_vocabulary = read_from_csv()[0]
 current_sport_vocabulary = ["current"]
-new_sport_vocabulary = ["new", "try", "looking", "for"]
+new_vocabulary = ["new", "try", "looking", "for"]
 ###
 
 ###
@@ -156,6 +192,7 @@ practical_info_vocabulary = ["info", "information", "guide"]
 
 ###
 social_vocabulary = ["social", "activities", "club", "event", "group", "association"]
+join_social_vocabulary = ["join", "participate"]
 ###
 
 
@@ -225,7 +262,7 @@ def studying(user_line: str):
 
 # Legacy code, Not needed
 def sports(user_line):
-    subtopic = recognize_topic(user_line, university_sport_vocabulary, new_sport_vocabulary)
+    subtopic = recognize_topic(user_line, university_sport_vocabulary, new_vocabulary)
     if subtopic == university_sport_vocabulary:
         print("This sport is available ")
 
@@ -233,3 +270,6 @@ def sports(user_line):
 # Legacy Code, Not Needed
 def social_activities(user_line):
     subtopic = recognize_topic()
+
+
+print(upcoming_events(datetime.now().day, datetime.now().month))
