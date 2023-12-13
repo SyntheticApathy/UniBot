@@ -25,7 +25,7 @@ def greetings_window():
         # When user clicks 'Ok'
         if event == 'Ok':
 
-            # In case the User leaves the input empty, a popup will appear reminding to put in input
+            # Checks to see if the input is empty, if it is then it gives a popup to remind to fill in the input
             if values['-USER_INPUT-'] == "":
                 sg.popup_ok("Input needs to not be empty!", keep_on_top=True, no_titlebar=True, text_color='Red')
                 window.close()
@@ -125,7 +125,7 @@ def studying_window():
         # If user clicks 'Ok'
         if event == 'Ok':
 
-            # In case the User leaves the input empty, a popup will appear reminding to put in input
+            # Checks to see if the input is empty, if it is then it gives a popup to remind to fill in the input
             if values['-STUDY_SUBTOPIC-'] == "":
                 sg.popup_ok("Input needs to not be empty!", keep_on_top=True, no_titlebar=True, text_color='Red')
                 window.close()
@@ -304,7 +304,7 @@ def social_window():
 
         if event == 'Ok':
 
-            # In case the User leaves the input empty
+            # Checks to see if the input is empty, if it is then it gives a popup to remind to fill in the input
             if values['-SOCIAL_SUBTOPIC-'] == "":
                 sg.popup_ok("Input needs to not be empty!", keep_on_top=True, no_titlebar=True, text_color='Red')
                 window.close()
@@ -312,6 +312,8 @@ def social_window():
 
 
 def sports_window():
+
+    #   TODO
     """
     The window which opens when user wants to talk about sports
     :return: nothing
@@ -320,7 +322,7 @@ def sports_window():
 
     # All the stuff inside the window.
     layout = [[sg.Text('You need help with Sport Activities!')],
-              [sg.Text('What do you need help with?'), sg.InputText(key="-SPORT_SUBTOPIC-")],
+              [sg.Text('What exactly do you need help with?'), sg.InputText(key="-SPORT_SUBTOPIC-")],
               [sg.Button('Ok'), sg.Button('Cancel'), sg.Button('Back')]]
 
     # Create the Window
@@ -338,7 +340,7 @@ def sports_window():
 
         if event == "Ok":
 
-            # In case the User leaves the input empty
+            # Checks to see if the input is empty, if it is then it gives a popup to remind to fill in the input
             if values['-SPORT_SUBTOPIC-'] == "":
                 sg.popup_ok("Input needs to not be empty!", keep_on_top=True, no_titlebar=True, text_color='Red')
                 window.close()

@@ -1,3 +1,26 @@
+import csv
+import re
+from typing import *
+
+
+class Event:
+    """
+        :param: name: the name of the event
+        :param: day: the day of the event in numerical value
+        :param: month: the month of the event in a string
+    """
+    def __init__(self, name: str, day: int, month: str):
+        self.name = name
+        self.day = day
+        self.month = month
+
+    def __str__(self):
+        return f'{self.name}: {self.day}, {self.month}'
+    def __repr__(self):
+        return f'{self.name}: {self.day}, {self.month}'
+
+
+
 def make_plural(vocabulary_list):
     transformed_list = []
     for word in vocabulary_list:
@@ -34,6 +57,49 @@ def process_input(userInput: str) -> str:
     # if chatbot cannot parse what the user wants it should then ask
     # explicitly
     return 'oops'
+
+
+def read_from_csv() -> (List[str], List[str], List[Event]):
+    """
+        This function reads from the csv file and returns all the information
+    :return: This function returns a tuple of list of strings consisting of all the sports, associations, and events
+    """
+    sports_list: List[str] = list()
+    associations: List[str] = list()
+    events: List[str] = list()
+
+    with open('unilife.csv', newline="") as csvfile:
+        csvreader = csv.reader(csvfile, delimiter=",")
+        line = 0
+        for row in csvreader:
+            sports_list.append(row[0])
+            associations.append(row[1])
+            events.append(row[2])
+            line += 1
+
+    events_list = parse_events(events)
+
+    return (sports_list, associations, events_list)
+
+def parse_events(events: List[str]) ->List[Event]:
+    """
+        This function takes a list of strings and parses it to make events objects.
+    :param events:  a list of the events from the csv file.
+    :return: This function returns a list of "Event" objects consisting of the name and date of the event.
+    """
+    list_events: List[Event] = list()
+    for index, event_line in enumerate(events):
+        if index == 0:
+            continue
+        match = re.match(r"(.+?)\s*\((\d+)\s*([a-zA-Z]+)\)", event_line)
+
+        if match:
+            name_of_event, day, month = match.groups()
+            list_events.append( Event(name_of_event.strip(), int(day), month.strip()))
+
+    return list_events
+
+
 
 
 # determining the vocabulary associated with each topic and consequent subtopic (contained in lists)
