@@ -469,13 +469,25 @@ def chose_new_sport(type: str):
             """
     sg.theme('DarkAmber')  # Add colour to window
 
+    index = 0
+    sport_option: str = chose_new_sport(type)[index]
+
     # Everything inside the window:
     layout = [[sg.Text(f'It looks like you want to take a {type} sport!')],
-              [sg.Text("Is this sport something you'd be interested in?"), sg.Text(choose_sport(type))],
+              [sg.Text("Is this sport something you'd be interested in?"), sg.Text(sport_option)],
               [sg.Button('Yes'), sg.Button('No')],
               [sg.Button('Cancel')]
               ]
     window = sg.Window('University Sports', layout, resizable=True)
+
+    while True:
+        event, values = window.read()
+        if event == 'No':
+            index += 1
+            window.close()
+            chose_new_sport(type)
+
+
 
 
 

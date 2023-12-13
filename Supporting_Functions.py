@@ -9,6 +9,7 @@ class Event:
         :param: day: the day of the event in numerical value
         :param: month: the month of the event in a string
     """
+
     def __init__(self, name: str, day: int, month: str):
         self.name = name
         self.day = day
@@ -16,9 +17,9 @@ class Event:
 
     def __str__(self):
         return f'{self.name}: {self.day}, {self.month}'
+
     def __repr__(self):
         return f'{self.name}: {self.day}, {self.month}'
-
 
 
 def make_plural(vocabulary_list):
@@ -88,7 +89,8 @@ def read_from_csv() -> (List[str], List[str], List[Event]):
     # Return tuple of lists.
     return (sports_list, associations, events_list)
 
-def parse_events(events: List[str]) ->List[Event]:
+
+def parse_events(events: List[str]) -> List[Event]:
     """
         This function takes a list of strings and parses it to make events objects.
     :param events:  a list of the events from the csv file.
@@ -98,7 +100,7 @@ def parse_events(events: List[str]) ->List[Event]:
     list_events: List[Event] = list()
 
     for index, event_line in enumerate(events):
-        #Skip over the first value, this is the string "events" in the csv file.
+        # Skip over the first value, this is the string "events" in the csv file.
         if index == 0:
             continue
         # As the form of the events is atypical, use regex to parse event
@@ -112,14 +114,26 @@ def parse_events(events: List[str]) ->List[Event]:
     return list_events
 
 
-def choose_sport(type: str) -> str:
+def choose_sport(type: str) -> List[str]:
     """
     This function decides what sport to offer the user.
     :param type: The option of type of sport
     :return: This function returns a sport depending on what the user choose before.
     """
 
-    team_sports: List[str] = ['Basketball',]
+    team_sports: List[str] = ['Basketball', 'Football', 'Waterpolo']
+    ballgames: List[str] = ["Basketball", "tennis", "Football", "Waterpolo"]
+    cardio: List[str] = ["Basketball", "Aikido", "Swimming", "Football", "Zumba", "Karate", "Waterpolo", "Yoga"]
+    strength_training: List[str] = ["Aikido", "Swimming", "Zumba", "Karate", "Yoga"]
+
+    if type == 'Team Sports':
+        return team_sports
+    elif type == 'Ballgames':
+        return ballgames
+    elif type == 'Cardio':
+        return cardio
+    elif type == "Strength Training":
+        return strength_training
 
 
 # determining the vocabulary associated with each topic and consequent subtopic (contained in lists)
