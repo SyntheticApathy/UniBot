@@ -306,7 +306,7 @@ def social_window():
         # Directs user to last window if 'Back' Is pressed
         if event == 'Back':
             window.close()
-            explicit_ask_window()
+            greetings_window()
 
         if event == 'Ok':
 
@@ -329,8 +329,6 @@ def social_window():
                 window.close()
                 explicit_social_window()
             else:
-                sg.popup_ok("I'm having trouble understanding you, please try again!", keep_on_top=True,
-                            no_titlebar=True)
                 window.close()
                 explicit_social_window()
 
@@ -369,38 +367,72 @@ def explicit_social_window():
 
 
 def upcoming_social_activity_window():
+    """
+    This window appears when the user wants to know about the upcoming social events.
+    :return: This function returns nothing.
+    """
+    # Get the upcoming events
     upcoming_event_list: List[Event] = upcoming_events(datetime.now().day, datetime.now().month)
 
     sg.theme('DarkAmber')  # Add colour to window
 
     # All the stuff inside your window.
     layout = [[sg.Text(" The upcoming Events are:")],
-              [sg.Text(upcoming_event_list[0]), sg.Text(upcoming_events[1]), sg.Text(upcoming_events[2])],
-              [sg.Button('Cancel'), sg.Button('Back')]]
+              [sg.Text(upcoming_event_list[0]), sg.Text(upcoming_event_list[1]), sg.Text(upcoming_event_list[2])],
+              [sg.Text('Do you need help with anything else?')],
+              [sg.Button('Yes'), sg.Button('No'), sg.Button('Cancel')]
+              ]
 
     # Create the Window
     window = sg.Window('Social Activities', layout, resizable=True)
     while True:
         event, values = window.read()
 
-        if event == 'Cancel' or event == sg.WIN_CLOSED:
+        if event == 'Cancel' or event == 'No' or event == sg.WIN_CLOSED:
             window.close()
             exit(0)
-        if event == 'Back':
-            social_window()
+        if event == 'Yes':
+            window.close()
+            greetings_window()
 
 
 def join_association_window():
+    """
+        This function appears when the user wants to join an association.
+    :return: This function returns nothing.
+    """
     sg.theme('DarkAmber')  # Add colour to window
 
     # All the stuff inside your window.
-    layout = [[sg.Text("I'm sorry, I'm having trouble understanding you.")],
-              [sg.Text('What do you need help with?'), sg.Button('Joining a new association'),
-               sg.Button('Upcoming events')],
+    layout = [[sg.Text("It seems as if you want to join an association.")],
+              [sg.Text('What type of association would suit you best?')],
+              [sg.Checkbox('International')],
+              [sg.Checkbox('Artistic')],
+              [sg.Checkbox('Debate')],
+              [sg.Checkbox('Scientific')],
+              [sg.Checkbox('Political')],
+              [sg.Checkbox('Altruistic')],
+              [sg.Button('Submit')],
               [sg.Button('Cancel'), sg.Button('Back')]]
 
     # Create the Window
     window = sg.Window('Social Activities', layout, resizable=True)
+
+    while True:
+        event, values = window.read()
+
+        if event == 'Cancel' or event == sg.WIN_CLOSED:
+            window.close()
+            exit(0)
+
+        if event == 'Back':
+            window.close()
+            social_window()
+
+        if event == 'Submit':
+            selected_preferences = [key for key, value in values.items() if value]
+            recommended_association = recommend_association(selected_preferences)
+            sg.popup_ok(f"Based on your preferences, we recommend you join: {recommended_association}")
 
 
 def sports_window():

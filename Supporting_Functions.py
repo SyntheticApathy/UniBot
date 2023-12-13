@@ -158,18 +158,62 @@ def upcoming_events(day: int, month: int) -> List[Event]:
     event_list = read_from_csv()[2]
     # Sort the events by month
     sorted_event_list = sorted(event_list, key=lambda event_month: event_month.month)
-
     upcoming_events_list = []
+    found_events = 0
+
     for event in sorted_event_list:
         if (month < event.month) or (month == event.month and day < event.day):
             upcoming_events_list.append(event)
-            if len(upcoming_events_list) == 3:
+            found_events += 1
+
+        # Check if we have found the required number of events
+        if found_events == 3:
+            break
+
+    # If we haven't found enough events, loop around the sorted list
+    if found_events < 3:
+        for event in sorted_event_list:
+            upcoming_events_list.append(event)
+            found_events += 1
+
+            # Check if we have found the required number of events
+            if found_events == 3:
                 break
 
     return upcoming_events_list
 
 
+def recommend_association(preferences):
+    """
+    This function maps the association to the preferences of the user and returns the association which the user will
+    like.
+    :param preferences: The preferences of the user
+    :return: this function returns the association which is
+    most like the preferences of the user.
+    """
+    # Map associations to their respective categories
+    association_categories = {
+        'Poetry Pals': ['Artistic'],
+        'Debate Club': ['Debate'],
+        'Science Society': ['Scientific'],
+        'Painting and Pottery': ['Artistic'],
+        'Language Club': ['International'],
+        'International Students Society': ['International'],
+        'Students for Sustainability': ['Political'],
+        'Animal Shelter Volunteers': ['Altruistic'],
+        'Bunch of Backpackers': ['International']
+    }
 
+    # Filter associations based on preferences
+    filtered_associations = [association for association, categories in association_categories.items() if
+                             all(category in preferences for category in categories)]
+
+    # If no associations match the preferences, return a default recommendation
+    if not filtered_associations:
+        return "No specific recommendation. Explore all associations!"
+
+    # Return the first matching association as the recommendation
+    return filtered_associations[0]
 
 
 # determining the vocabulary associated with each topic and consequent subtopic (contained in lists)
@@ -270,6 +314,3 @@ def sports(user_line):
 # Legacy Code, Not Needed
 def social_activities(user_line):
     subtopic = recognize_topic()
-
-
-print(upcoming_events(datetime.now().day, datetime.now().month))
