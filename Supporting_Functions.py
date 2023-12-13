@@ -1,7 +1,6 @@
 import csv
 import re
 from typing import *
-from datetime import datetime
 
 
 class Event:
@@ -98,7 +97,7 @@ def read_from_csv() -> (List[str], List[str], List[Event]):
     del sports_list[0]
     del associations[0]
     # Return tuple of lists.
-    return (sports_list, associations, events_list)
+    return sports_list, associations, events_list
 
 
 def parse_events(events: List[str]) -> List[Event]:
@@ -125,10 +124,10 @@ def parse_events(events: List[str]) -> List[Event]:
     return list_events
 
 
-def choose_sport(type: str) -> List[str]:
+def choose_sport(sport_type: str) -> List[str]:
     """
     This function decides what sport to offer the user.
-    :param type: The option of type of sport
+    :param sport_type: The option of type of sport
     :return: This function returns a sport depending on what the user choose before.
     """
 
@@ -137,19 +136,19 @@ def choose_sport(type: str) -> List[str]:
     cardio: List[str] = ["Basketball", "Aikido", "Swimming", "Football", "Zumba", "Karate", "Waterpolo", "Yoga"]
     strength_training: List[str] = ["Aikido", "Swimming", "Zumba", "Karate", "Yoga"]
 
-    if type == 'Team Sports':
+    if sport_type == 'Team Sports':
         return team_sports
-    elif type == 'Ballgames':
+    elif sport_type == 'Ballgames':
         return ballgames
-    elif type == 'Cardio':
+    elif sport_type == 'Cardio':
         return cardio
-    elif type == "Strength Training":
+    elif sport_type == "Strength Training":
         return strength_training
 
 
 def upcoming_events(day: int, month: int) -> List[Event]:
     """
-    This function checks what the next three events will be according to theh given day and month
+    This function checks what the next three events will be according to the given day and month
     :param day: the day we want to check the closest future event of
     :param month: the month we want to check the closest future event of.
     :return: this function returns 3 events
@@ -223,7 +222,7 @@ sports_vocabulary_pre_plural = ["sport", "football", "game", "play", "tournament
 sports_vocabulary = make_plural(sports_vocabulary_pre_plural)
 university_sport_vocabulary = read_from_csv()[0]
 current_sport_vocabulary = ["current"]
-new_vocabulary = ["new", "try", "looking", "for"]
+new_vocabulary = ["new", "try", "looking", "for", "upcoming"]
 ###
 
 ###
@@ -248,7 +247,8 @@ greetings_vocabulary = ["hi", "hello", "yo", "hey"]
 
 
 def recognize_topic(text,
-                    *topic_lists):  # the star allows us to pass multiple arguments of the same type and combine them into a list (of lists in this case)
+                    *topic_lists):  # the star allows us to pass multiple arguments of the same type and combine them
+    # into a list (of lists in this case)
 
     # the list that helps to keep track of the frequency of the words associated with each consecutive topic
     topic_counts = [0] * len(topic_lists)
@@ -259,7 +259,8 @@ def recognize_topic(text,
     # counts word matches for each topic with the topic lists
     for word in user_words:
         for i, topic_words in enumerate(
-                topic_lists):  # enumerate function helps us to access the index of each entry (in this case list of thematic words) and their items simultaneously
+                topic_lists):  # enumerate function helps us to access the index of each entry (in this case list of
+            # thematic words) and their items simultaneously
             if word in topic_words:
                 topic_counts[i] += 1
 
@@ -273,44 +274,3 @@ def recognize_topic(text,
             return topic_lists[max_index[0]]
         else:
             return None
-
-
-# Legacy code, Not needed
-def studying(user_line: str):
-    # subtopic variable helps to investigate the deeper context of the text after already narrowing the topic by detecting it as studying
-    subtopic = recognize_topic(user_line, struggle_vocabulary, practical_info_vocabulary)
-
-    if subtopic == struggle_vocabulary:
-        print(
-            "UniBot: I'm sorry to hear that. Would you be interested in sharing it with other students? Participation in a study group could be very helpful.\nWould you like me to sign you up?")
-
-        decision = input()
-        decision = decision.lower()
-
-        while decision not in ["yes", "no"]:
-            print("UniBot: Please indicate your choice through an answer of yes or no.")
-            decision = input()
-            decision = decision.lower()
-
-        if decision == "no":
-            print("Unibot: I suggest making an appointment with a student advisor.")
-
-        elif decision == "yes":
-            print("UniBot: I've signed you up for the study group, I hope ")
-
-    elif subtopic == practical_info_vocabulary:
-        print("UniBot: Please visit the Study Desk for all practical information")
-    elif not subtopic:
-        print("")
-
-
-# Legacy code, Not needed
-def sports(user_line):
-    subtopic = recognize_topic(user_line, university_sport_vocabulary, new_vocabulary)
-    if subtopic == university_sport_vocabulary:
-        print("This sport is available ")
-
-
-# Legacy Code, Not Needed
-def social_activities(user_line):
-    subtopic = recognize_topic()

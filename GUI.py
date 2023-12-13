@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import PySimpleGUI as sg
 from Supporting_Functions import *
 from Supporting_Functions import Event
@@ -50,10 +48,6 @@ def greetings_window():
             elif topic == 'oops':
                 explicit_ask_window()
 
-    # Should be unreachable, but will close window in case of bug.
-    window.close()
-    exit(-1)
-
 
 def explicit_ask_window():
     """
@@ -95,10 +89,6 @@ def explicit_ask_window():
         elif event == 'Social Activities':
             window.close()
             social_window()
-
-    # unreachable code, but just in case bug happens it closes.
-    window.close()
-    exit(-1)
 
 
 def studying_window():
@@ -156,10 +146,6 @@ def studying_window():
         if event == "Back":
             window.close()
             explicit_ask_window()
-
-    # Unreachable code, closes window and exits program if something weird happens
-    window.close()
-    exit(-1)
 
 
 def struggle_studies():
@@ -248,10 +234,6 @@ def struggle_studies():
             window.close()
             studying_window()
 
-    # Unreachable code, closes window and exits program if something weird happens
-    window.close()
-    exit(-1)
-
 
 def practical_info_studies():
     """
@@ -276,14 +258,11 @@ def practical_info_studies():
         if event == "Back":
             window.close()
             greetings_window()
-    # Unreachable code, closes window and exits program if something weird happens
-    window.close()
-    exit(-1)
 
 
 def social_window():
     """
-    The window which opens when user wants to talk about social activites
+    The window which opens when user wants to talk about social activities
     :return:
     """
     sg.theme('DarkAmber')  # Add colour to window
@@ -630,7 +609,6 @@ def chose_new_sport(sport_type: str, index: int):
 def sorry_window():
     """
     The window which displays if a user can't find a new sport that they are interested in.
-    :param type: The type of sport the user is looking for
     :return: This function returns nothing.
     """
 
