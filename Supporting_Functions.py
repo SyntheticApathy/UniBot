@@ -64,10 +64,12 @@ def read_from_csv() -> (List[str], List[str], List[Event]):
         This function reads from the csv file and returns all the information
     :return: This function returns a tuple of list of strings consisting of all the sports, associations, and events
     """
+    # Return values, initialized and empty for now
     sports_list: List[str] = list()
     associations: List[str] = list()
     events: List[str] = list()
 
+    # Read from csv, add to lists as needed.
     with open('unilife.csv', newline="") as csvfile:
         csvreader = csv.reader(csvfile, delimiter=",")
         line = 0
@@ -77,8 +79,13 @@ def read_from_csv() -> (List[str], List[str], List[Event]):
             events.append(row[2])
             line += 1
 
+    # Parse events list from csv to a List of Event objects.
     events_list = parse_events(events)
 
+    # deletes the first element of both lists as this is the identifier.
+    del sports_list[0]
+    del associations[0]
+    # Return tuple of lists.
     return (sports_list, associations, events_list)
 
 def parse_events(events: List[str]) ->List[Event]:
@@ -87,15 +94,20 @@ def parse_events(events: List[str]) ->List[Event]:
     :param events:  a list of the events from the csv file.
     :return: This function returns a list of "Event" objects consisting of the name and date of the event.
     """
+    # Initialize return value
     list_events: List[Event] = list()
+
     for index, event_line in enumerate(events):
+        #Skip over the first value, this is the string "events" in the csv file.
         if index == 0:
             continue
+        # As the form of the events is atypical, use regex to parse event
         match = re.match(r"(.+?)\s*\((\d+)\s*([a-zA-Z]+)\)", event_line)
-
         if match:
             name_of_event, day, month = match.groups()
-            list_events.append( Event(name_of_event.strip(), int(day), month.strip()))
+
+            # After parsing, create a new Event object and add to list.
+            list_events.append(Event(name_of_event.strip(), int(day), month.strip()))
 
     return list_events
 
@@ -107,17 +119,10 @@ def parse_events(events: List[str]) ->List[Event]:
 ###
 sports_vocabulary_pre_plural = ["sport", "football", "game", "play", "tournament", "competition", "event"]
 sports_vocabulary = make_plural(sports_vocabulary_pre_plural)
-university_sport_vocabulary = ["aikido", "football", "soccer", "basketball", "tennis", "swimming", "zumba", "karate",
-                               "yoga", "waterpolo"]
+university_sport_vocabulary = read_from_csv()[0]
+current_sport_vocabulary = ["current"]
 new_sport_vocabulary = ["new", "try", "looking", "for"]
 ###
-
-
-schedule = """aikido,Poetry Pals,New Year's Party (13 Jan),basketball,Debate Club,Valentine's Dinner,(14 Feb),tennis,Science Society,Carnival Night,(1 March),swimming,Painting and Pottery,Karaoke Night,(18 April),football,Language Club,Kayaking Trip,(5 May)
-Zumba, International Students Society, Seaside Picnic (15 Sep)
-karate, Students for Sustainability, Halloween Party (31 Oct)
-yoga, Animal Shelter Volunteers, Thanksgiving Jamboree (26 Nov)
-waterpolo, Bunch of Backpackers, Christmas Dinner (18 Dec)"""
 
 ###
 studying_vocabulary = ["studying", "studies", "study", "lecture", "lectures", "classes", "class"]

@@ -181,10 +181,11 @@ def struggle_studies():
         if event == 'Yes':
             # Layout of new window
             sg.theme('DarkAmber')
-            layout2 = [[sg.Text("OK! I recommend you reach out to your fellow students and try to join a study group!")],
-                       [sg.Text("Do you need help with anything else?")],
-                       [sg.Button('Yes'), sg.Button("Exit")]
-                       ]
+            layout2 = [
+                [sg.Text("OK! I recommend you reach out to your fellow students and try to join a study group!")],
+                [sg.Text("Do you need help with anything else?")],
+                [sg.Button('Yes'), sg.Button("Exit")]
+            ]
             # Close old window
             window.close()
             # Create new window
@@ -208,18 +209,15 @@ def struggle_studies():
             #
             sg.theme('DarkAmber')
             layout3 = [[sg.Text('Ok! I recommend you reach out to a study advisor!')],
-                        [sg.Text('Do you need help with anything else?')],
-                        [sg.Button('Yes'), sg.Button('Exit')]
-            ]
-
-        # If user closes window or presses 'Cancel', program terminates.
+                       [sg.Text('Do you need help with anything else?')],
+                       [sg.Button('Yes'), sg.Button('Exit')]
+                       ]
             # close old window
             window.close()
 
-            #Create new window
+            # Create new window
 
             window = sg.Window('Study Help', layout3, resizable=True)
-
 
             while True:
                 event, values = window.read()
@@ -252,7 +250,7 @@ def practical_info_studies():
     The window that opens if the user needs practical info about their studies.
     :return: nothing
     """
-    #Create window
+    # Create window
     sg.theme('DarkAmber')
     layout = [[sg.Text('Please visit the student desk for all practical information.')],
               [sg.Button('Exit'), sg.Button('Back')]
@@ -312,8 +310,6 @@ def social_window():
 
 
 def sports_window():
-
-    #   TODO
     """
     The window which opens when user wants to talk about sports
     :return: nothing
@@ -345,19 +341,91 @@ def sports_window():
                 sg.popup_ok("Input needs to not be empty!", keep_on_top=True, no_titlebar=True, text_color='Red')
                 window.close()
                 sports_window()
-
             # Decide what subtopic the user wants to talk about
-            subtopic = recognize_topic(values['-SPORT_SUBTOPIC-'], new_sport_vocabulary, university_sport_vocabulary)
+            subtopic = recognize_topic(values['-SPORT_SUBTOPIC-'], new_sport_vocabulary, university_sport_vocabulary,
+                                       current_sport_vocabulary)
 
-            if subtopic == university_sport_vocabulary:
+            # If user wants to ask about a specific sport
+            if subtopic == university_sport_vocabulary or subtopic == current_sport_vocabulary:
+                window.close()
                 university_sports_window()
+            # If user wants to look for a new sport
+            if subtopic == new_sport_vocabulary:
+                window.close()
+                new_sport_window()
 
 
 def university_sports_window():
     """
-    The window which opens when user wants to talk about university sports
+    The window which opens when user wants to talk about current university sports
     :return: nothing
     """
+    sg.theme('DarkAmber')  # Add colour to window
+
+    # Everything inside the window:
+    layout = [[sg.Text('You want to talk about a specific university sport.')],
+              [sg.Text('The sports the university offers are:')],
+              [sg.Text(read_from_csv()[0])],
+              [sg.Text("Do you have a question about one of these sports?")],
+              [sg.Button("Yes"), sg.Button("No"), sg.Button('Cancel')]
+              ]
+    window = sg.Window('University Sports', layout, resizable=True)
+
+    # Event loop
+    while True:
+        event, values = window.read()
+
+        if event == "Yes":
+            window.close()
+            current_sport_contact_window()
+        if event == "No":
+            window.close()
+            new_sport_window()
+
+        if event == "Cancel" or event == sg.WIN_CLOSED:
+            window.close()
+            exit(0)
+
+
+def current_sport_contact_window():
+    """
+            The window which opens when user wants to talk about a current university sport
+            :return: nothing
+            """
+    sg.theme('DarkAmber')  # Add colour to window
+
+    # Everything inside the window:
+    layout = [[sg.Text('If you have a question about any one of the currently available sports, please contact the '
+                       'University Sports Centre')],
+              [sg.Text('You can view their website at: https://sportcentrumvu.nl/en/')],
+              [sg.Text("Do you have any other questions?")],
+              [sg.Button('Yes'), sg.Button("No"), sg.Button('Cancel')]
+              ]
+    # Create window
+    window = sg.Window('University Sports', layout, resizable=True)
+    # Event loop
+    while True:
+        event, values = window.read()
+
+        # If user has more questions redirects to starting window
+        if event == 'Yes':
+            window.close()
+            greetings_window()
+            # If user has no more questions then closes window and exits program
+        if event == 'No':
+            window.close()
+            exit(0)
+        # If user cancels or closes window.
+        if event == "Cancel" or event == sg.WIN_CLOSED:
+            window.close()
+            exit(0)
+
+
+def new_sport_window():
+    """
+        The window which opens when user wants to talk about new university sports
+        :return: nothing
+        """
     sg.theme('DarkAmber')  # Add colour to window
 
     # Everything inside the window:
@@ -371,10 +439,6 @@ def university_sports_window():
     # Event loop
     while True:
         event, values = window.read()
-
-        if event == "Ok":
-            window.close()
-            greetings_window()
 
 
 greetings_window()
