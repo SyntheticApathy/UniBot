@@ -451,12 +451,16 @@ def new_sport_window():
         event, values = window.read()
 
         if event == "Team Sports":
+            window.close()
             chose_new_sport("Team Sports", 0)
         elif event == 'Ballgames':
+            window.close()
             chose_new_sport("Ballgames", 0)
         elif event == 'Cardio':
+            window.close()
             chose_new_sport("Cardio", 0)
         elif event == 'Strength Training':
+            window.close()
             chose_new_sport("Strength Training", 0)
 
         if event == 'Cancel' or event == sg.WIN_CLOSED:
@@ -466,19 +470,23 @@ def new_sport_window():
 
 def chose_new_sport(type: str, index: int):
     """
-            The window which opens when user wants to talk about a specific new university sport
-            :return: nothing
-            """
+
+  :param type: the type of sport the user is looking for
+  :param index: the index of the list of potential sports
+  :return: This function returns nothing
+  """
+
     sg.theme('DarkAmber')  # Add colour to window
 
     if index > len(choose_sport(type)):
-        sorry_window(type)
+
+        sorry_window()
 
     sport_option: str = choose_sport(type)[index]
 
     # Everything inside the window:
     layout = [[sg.Text(f'It looks like you want to take a {type} sport!')],
-              [sg.Text("Is this sport something you'd be interested in?"), sg.Text(sport_option)],
+              [sg.Text("Is this sport something you'd be interested in? "), sg.Text(sport_option)],
               [sg.Button('Yes'), sg.Button('No')],
               [sg.Button('Cancel')]
               ]
@@ -498,6 +506,36 @@ def chose_new_sport(type: str, index: int):
             window.close()
             exit(0)
 
+
+
+def sorry_window():
+    """
+    The window which displays if a user can't find a new sport that they are interested in.
+    :param type: The type of sport the user is looking for
+    :return: This function returns nothing.
+    """
+
+    sg.theme('DarkAmber')  # Add colour to window
+
+    # Everything inside the window:
+    layout = [[sg.Text('Unfortunately, I was not able to find a sport that you would enjoy.')],
+              [sg.Text('Would you like to see a list of sports that the University offers?')],
+              [sg.Button('Yes'), sg.Button('No'), sg.Button('Cancel')]
+              ]
+    window = sg.Window('University Sports', layout, resizable=True)
+
+    while True:
+        event, values = window.read()
+
+        if event == "Yes":
+            window.close()
+            university_sports_window()
+        if event == "No":
+            window.close()
+            greetings_window()
+        if event == 'Cancel' or event == sg.WIN_CLOSED:
+            window.close()
+            exit(0)
 
 def chosen_sport_window(sport_option: str):
     """
