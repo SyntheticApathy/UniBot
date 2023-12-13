@@ -179,11 +179,9 @@ def struggle_studies():
 
         # If user wants help with their studies, they are invited to join a study group.
         if event == 'Yes':
-            # todo change maybe the text for the layout, I used a random group number and time.
-
-            # Layout ofr new window
+            # Layout of new window
             sg.theme('DarkAmber')
-            layout2 = [[sg.Text("OK! I've signed you up for study group number 3, Wednesday at 18:00")],
+            layout2 = [[sg.Text("OK! I recommend you reach out to your fellow students and try to join a study group!")],
                        [sg.Text("Do you need help with anything else?")],
                        [sg.Button('Yes'), sg.Button("Exit")]
                        ]
@@ -204,14 +202,41 @@ def struggle_studies():
                 if event == 'Yes':
                     window.close()
                     greetings_window()
+
+                # If user does not want to join study group, bot recommends speaking with a study advisor
+        if event == 'No':
+            #
+            sg.theme('DarkAmber')
+            layout3 = [[sg.Text('Ok! I recommend you reach out to a study advisor!')],
+                        [sg.Text('Do you need help with anything else?')],
+                        [sg.Button('Yes'), sg.Button('Exit')]
+            ]
+
         # If user closes window or presses 'Cancel', program terminates.
+            # close old window
+            window.close()
+
+            #Create new window
+
+            window = sg.Window('Study Help', layout3, resizable=True)
+
+
+            while True:
+                event, values = window.read()
+
+                # If user clicks 'yes' button, then it redirects to the greetings window again for additional help.
+                if event == 'Yes':
+                    window.close()
+                    greetings_window()
+
+                # If user closes window or presses 'Cancel', program terminates.
+                if event == 'Exit' or event == sg.WIN_CLOSED:
+                    window.close()
+                    exit(0)
+
         if event == "Cancel" or event == sg.WIN_CLOSED:
             window.close()
             exit(0)
-        # If user does not want to join study group, directs back to studying window
-        if event == 'No':
-            window.close()
-            studying_window()
         # Directs user to last window
         if event == "Back":
             window.close()
