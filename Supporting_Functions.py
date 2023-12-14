@@ -233,14 +233,16 @@ new_vocabulary = ["new", "try", "looking", "for", "upcoming"]
 
 ###
 studying_vocabulary = ["studying", "studies", "study", "lecture", "lectures", "classes", "class"]
-struggle_vocabulary = ["struggle", "struggling", "problem", "difficulty", "difficulties", "issue", ]
+struggle_vocabulary = ["struggle", "struggling", "problem", "problems", "difficulty", "difficulties", 
+                       "issue", "issues", "help", "support", "advice", "advisor", "guidance"]
 struggle_vocabulary = make_plural(struggle_vocabulary)
-practical_info_vocabulary = ["info", "information", "guide"]
+practical_info_vocabulary = ["info", "information", "guide", "student", "desk"]
 ###
 
 
 ###
-social_vocabulary = ["social", "activities", "club", "event", "group", "association"]
+social_vocabulary = ["social", "activities", "activity", "club", "clubs", "event", "events", "group", "groups",
+                     "association", "associations", "party", "events"]
 join_social_vocabulary = ["join", "participate"]
 ###
 
