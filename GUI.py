@@ -179,7 +179,7 @@ def struggle_studies():
             layout2 = [
                 [sg.Text("OK! I recommend you reach out to your fellow students and try to join a study group!")],
                 [sg.Text("Do you need help with anything else?")],
-                [sg.Button('Yes'), sg.Button("Exit")]
+                [sg.Button('Yes'), sg.Button("Cancel")]
             ]
             # Close old window
             window.close()
@@ -190,7 +190,7 @@ def struggle_studies():
                 event, values = window.read()
 
                 # If user closes window or presses 'Cancel', program terminates.
-                if event == sg.WIN_CLOSED() or event == 'Exit':
+                if event == sg.WIN_CLOSED() or event == 'Cancel':
                     window.close()
                     exit(0)
 
@@ -205,7 +205,7 @@ def struggle_studies():
             sg.theme('DarkAmber')
             layout3 = [[sg.Text('Ok! I recommend you reach out to a study advisor!')],
                        [sg.Text('Do you need help with anything else?')],
-                       [sg.Button('Yes'), sg.Button('Exit')]
+                       [sg.Button('Yes'), sg.Button('Cancel')]
                        ]
             # close old window
             window.close()
@@ -223,7 +223,7 @@ def struggle_studies():
                     greetings_window()
 
                 # If user closes window or presses 'Cancel', program terminates.
-                if event == 'Exit' or event == sg.WIN_CLOSED:
+                if event == 'Cancel' or event == sg.WIN_CLOSED:
                     window.close()
                     exit(0)
 
@@ -411,6 +411,7 @@ def join_association_window():
 
         if event == 'Submit':
             selected_preferences = [key for key, value in values.items() if value]
+            print(selected_preferences)
             recommended_association = recommend_association(selected_preferences)
             sg.popup_ok(f"Based on your preferences, we recommend you join: {recommended_association}")
 

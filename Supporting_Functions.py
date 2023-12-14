@@ -191,16 +191,22 @@ def recommend_association(preferences):
     most like the preferences of the user.
     """
     # Map associations to their respective categories
+    # 0 -> International
+    # 1 -> Artistic
+    # 2 -> Debate
+    # 3 -> Scientific
+    # 4 -> Political
+    # 5 -> Altruistic
     association_categories = {
-        'Poetry Pals': ['Artistic'],
-        'Debate Club': ['Debate'],
-        'Science Society': ['Scientific'],
-        'Painting and Pottery': ['Artistic'],
-        'Language Club': ['International'],
-        'International Students Society': ['International'],
-        'Students for Sustainability': ['Political'],
-        'Animal Shelter Volunteers': ['Altruistic'],
-        'Bunch of Backpackers': ['International']
+        'Poetry Pals': [1],
+        'Debate Club': [2],
+        'Science Society': [3],
+        'Painting and Pottery': [1],
+        'Language Club': [0],
+        'International Students Society': [0],
+        'Students for Sustainability': [4],
+        'Animal Shelter Volunteers': [5],
+        'Bunch of Backpackers': [0]
     }
 
     # Filter associations based on preferences
