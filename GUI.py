@@ -410,8 +410,8 @@ def join_association_window():
             social_window()
 
         if event == 'Submit':
+            # Get all the preferences as indexes of the checkbox's
             selected_preferences = [key for key, value in values.items() if value]
-            print(selected_preferences)
             recommended_association = recommend_association(selected_preferences)
             sg.popup_ok(f"Based on your preferences, we recommend you join: {recommended_association}")
 
